@@ -1,8 +1,11 @@
 package com.stephen7777.product.service.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.stephen7777.product.service.dto.ProductRequest;
+import com.stephen7777.product.service.dto.ProductResponce;
 import com.stephen7777.product.service.model.Product;
 import com.stephen7777.product.service.respository.ProductRepository;
 
@@ -25,5 +28,20 @@ public class ProductService {
 				.build();
 		productRepository.save(product);
 		log.info("Product {} is saved", product.getId());
+	}
+	
+	public List<ProductResponce> getAllProducts() {
+		List<Product> products = productRepository.findAll();
+		
+		return products.stream().map(this::mapToProductResponce).toList();
+	}
+	
+	private ProductResponce mapToProductResponce(Product product) {
+		return ProductResponce.builder()
+				.id(product.getId())
+				.name(product.getName())
+				.description(product.getDescription())
+				.price(product.getPrice())
+				.build();
 	}
 }
